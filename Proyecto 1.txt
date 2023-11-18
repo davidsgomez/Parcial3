@@ -1,0 +1,43 @@
+using System;
+
+class Calculadora
+{
+    static void Main()
+    {
+        int[] operaciones = { 1, 2, 3, 4 };
+
+        try
+        {
+            MostrarMenu();
+            int seleccion = ObtenerOperacion(operaciones);
+
+            Console.WriteLine("Ingrese el primer número:");
+            int num1 = ObtenerNumero();
+
+            Console.WriteLine("Ingrese el segundo número:");
+            int num2 = ObtenerNumero();
+
+            RealizarOperacion(seleccion, num1, num2);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    static void MostrarMenu() => Console.WriteLine("Seleccione una operación:\n1. Suma\n2. Resta\n3. Multiplicación\n4. División");
+
+    static int ObtenerOperacion(int[] operaciones) => Array.IndexOf(operaciones, int.TryParse(Console.ReadLine(), out int seleccion) ? seleccion : 0) != -1 ? seleccion : throw new Exception("Selección no válida");
+
+    static int ObtenerNumero() => int.TryParse(Console.ReadLine(), out int num) ? num : throw new Exception("Ingrese un valor numérico válido");
+
+    static void RealizarOperacion(int seleccion, int num1, int num2) => Console.WriteLine(seleccion switch
+    {
+        1 => $"Resultado de la Suma: {num1} + {num2} = {num1 + num2}",
+        2 => $"Resultado de la Resta: {num1} - {num2} = {num1 - num2}",
+        3 => $"Resultado de la Multiplicación: {num1} * {num2} = {num1 * num2}",
+        4 when num2 != 0 => $"Resultado de la División: {num1} / {num2} = {num1 / num2}",
+        4 => throw new DivideByZeroException("No se puede dividir por cero"),
+        _ => throw new Exception("Operación no válida")
+    });
+}
